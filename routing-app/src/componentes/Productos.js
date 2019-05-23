@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Producto from './Producto';
+import Buscador from './Buscador';
 import './Productos.css';
 
 class Productos extends Component {
@@ -7,6 +8,10 @@ class Productos extends Component {
         return(
             <div className="productos">
                 <h2>Nuestros Productos</h2>
+                { /* Componente: Buscador */ }
+                <Buscador
+                            busqueda={this.props.busquedaProducto}
+                ></Buscador>
                 <ul className="lista-productos">
                     {Object.keys(this.props.productos).map(producto => (
                         <Producto

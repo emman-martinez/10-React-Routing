@@ -13,6 +13,7 @@ class Router extends Component {
 
     state = {
         productos: [],   
+        terminoBusqueda: '',
     }
 
     componentWillMount() {
@@ -21,7 +22,35 @@ class Router extends Component {
         })
     }
 
+    busquedaProducto = (busqueda) => {
+        if(busqueda.length > 3) {
+            this.setState({
+                terminoBusqueda: busqueda,
+            })
+            // console.log(this.state.terminoBusqueda);
+        } else {
+            this.setState({
+                terminoBusqueda: '',
+            })
+        }
+    }
+
     render() {
+
+        let productos = [...this.state.productos];
+        let busqueda = this.state.terminoBusqueda;
+        let resultado;
+
+        if(busqueda !== '') {
+            // console.log('No está vacío');
+            resultado = productos.filter(producto => (
+                producto.nombre.toLowerCase().indexOf(busqueda.toLowerCase()) !== -1 
+            ))
+        } else {
+            // console.log('Si está vacío');
+            resultado = productos;
+        }
+
         return(
             <BrowserRouter>
                 { /* Componente: Header */ }
@@ -32,14 +61,16 @@ class Router extends Component {
                     <Route exact path="/" render={() => (
                          /* Componente: Productos */
                         <Productos
-                                    productos={this.state.productos}
+                                    productos={resultado}
+                                    busquedaProducto={this.busquedaProducto}
                         ></Productos>
                     )}></Route>
                     {/* Componente: Nosotros */}
                     <Route exact path="/nosotros" component={Nosotros}></Route>
                     <Route exact path="/productos" render={() => (
                         <Productos
-                                    productos={this.state.productos}
+                                    productos={resultado}
+                                    busquedaProducto={this.busquedaProducto}
                         ></Productos>
                     )}></Route>
                     <Route exact path="/producto/:productoId" render={(props) => {
